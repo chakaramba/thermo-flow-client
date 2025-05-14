@@ -100,12 +100,14 @@ body {
     background: none;
     border: none;
     color: #333;
+    opacity: 0.2;
     cursor: pointer;
 }
 
 .disconnect-btn:hover {
     background-color: #eee;
     color: #000;
+    opacity: 0.5;
 }
 
 .device-header {
@@ -118,7 +120,7 @@ body {
 }
 
 .device-name {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     font-weight: 500;
     color: #2a2a2a;
     line-height: 1.4;
