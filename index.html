@@ -29,24 +29,29 @@
                 <!-- Base arc -->
                 <path class="gauge-outline" d="M10,100 A90,90 0 0 1 190,100" stroke="#eee" fill="none"/>
                 <!-- Visible stroke (white, thinner) -->
-                <path class="gauge-back" d="M10,100 A90,90 0 0 1 190,100" stroke="white" stroke-width="10" fill="none" />
-                
+                <path class="gauge-back" d="M10,100 A90,90 0 0 1 190,100" stroke="white" stroke-width="10" fill="none"/>
+
                 <g class="gauge-ticks"></g>
-                
+
                 <!-- Fill arc -->
                 <path class="gauge-fill" d="M10,100 A90,90 0 0 1 190,100" stroke="#333" fill="none"/>
-                
+
                 <!-- Rotatable handle group -->
                 <g class="gauge-handle" transform="rotate(0, 100, 100)">
-                    <circle cx="100" cy="10" r="12" fill="white" stroke="#ccc" stroke-width="1" filter="url(#shadow)" />
+                    <circle cx="100" cy="10" r="12" fill="white" stroke="#ccc" stroke-width="1" filter="url(#shadow)"/>
                 </g>
                 <!-- Shadow filter definition -->
                 <defs>
                     <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.2" />
+                        <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.2"/>
                     </filter>
                 </defs>
             </svg>
+            <div class="gauge-readout">
+                <span class="gauge-label current">current</span>
+                <span class="gauge-value"><span class="value-number">78</span><span class="value-unit">°</span></span>
+                <span class="gauge-label power">pwr90%</span>
+            </div>
         </div>
         <div class="device-switch">
             <label class="switch">
@@ -70,9 +75,9 @@
 
         const startTemperature = 30;
         const endTemperature = 90;
-        
-        for (let i = startTemperature; i <= endTemperature; i+=10) {
-            const angle = ((i - startTemperature)/(endTemperature-startTemperature)) * Math.PI;
+
+        for (let i = startTemperature; i <= endTemperature; i += 10) {
+            const angle = ((i - startTemperature) / (endTemperature - startTemperature)) * Math.PI;
             const x1 = centerX + innerRadius * Math.cos(Math.PI - angle);
             const y1 = centerY - innerRadius * Math.sin(Math.PI - angle);
             const x2 = centerX + outerRadius * Math.cos(Math.PI - angle);

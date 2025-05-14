@@ -163,7 +163,7 @@ body {
 
 .gauge-back {
     stroke-width: 10px;
-    stroke:white;
+    stroke: white;
 }
 
 .gauge-fill {
@@ -172,11 +172,13 @@ body {
     transition: stroke-dashoffset 0.3s ease;
     stroke-dasharray: 283; /* approximate arc length */
     stroke-dashoffset: 90;
-}body {
-     margin: 0;
-     font-family: 'JetBrains Mono', system-ui, sans-serif;
-     background-color: #f4f4f4;
- }
+}
+
+body {
+    margin: 0;
+    font-family: 'JetBrains Mono', system-ui, sans-serif;
+    background-color: #f4f4f4;
+}
 
 .top-bar {
     display: flex;
@@ -207,20 +209,6 @@ body {
     letter-spacing: 0.02em;
     margin: 0;
     color: #222;
-}
-
-.add-btn {
-    font-size: 1.75rem;
-    font-weight: 300;
-    background: none;
-    border: none;
-    color: #333;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .add-btn:hover {
@@ -338,7 +326,7 @@ body {
 
 .gauge-back {
     stroke-width: 9px;
-    stroke:white;
+    stroke: white;
 }
 
 .gauge-fill {
@@ -350,7 +338,8 @@ body {
 }
 
 .device-temp-gauge {
-    margin: 60px 20px auto 20px;
+    margin: 50px 20px auto 20px;
+    position: relative;
 }
 
 .gauge-handle {
@@ -371,4 +360,50 @@ body {
     text-anchor: middle;
     dominant-baseline: middle;
     pointer-events: none;
+}
+
+
+.gauge-readout {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    text-align: center;
+    width: max-content;
+}
+
+.gauge-value {
+    font-size: 50px;
+    line-height: 1;
+    display: flex;
+    align-items: flex-end;
+}
+
+.gauge-label {
+    font-size: 10px;
+    color: #333;
+    line-height: 1;
+}
+
+.gauge-label.power {
+    margin-left: -9px;
+    padding-bottom: 6px;
+}
+
+.gauge-label.current {
+    margin-right: -5px;
+    padding-bottom: 6px;
+}
+
+.value-number {
+    font-size: 50px;
+}
+
+.value-unit {
+    font-size: 20px;
+    margin-left: -5px;
+    padding-bottom: 25px;
 }
