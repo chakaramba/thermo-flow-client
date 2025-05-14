@@ -9,6 +9,7 @@ const devicesContainerElement = document.getElementById("connectedDevicesContain
 
 const gaugeStartTemperature = 30;
 const gaugeEndTemperature = 90;
+const initialTargetTemperature = 65; 
 
 const addNewDeviceButton = document.getElementById("addNewDeviceButton");
 addNewDeviceButton.addEventListener("click", tryAddNewDevice);
@@ -60,14 +61,18 @@ async function connectToDevice() {
             return connectedDevice;
         })
         .then(async connectedDevice => {
-            return  Promise.all
+            connectDeviceInfoPanel(connectedDevice);
+            await Promise.all
             ([
-                new Promise(() => connectDeviceInfoPanel(connectedDevice)),
                 connectTemperatureSensorCharacteristic(connectedDevice),
                 connectHeatingToggleCharacteristic(connectedDevice),
                 connectHeatingPowerOutputCharacteristic(connectedDevice),
-                connectPowerDropCharacteristic(connectedDevice)
+                connectPowerDropCharacteristic(connectedDevice),
             ]);
+            return connectedDevice;
+        })
+        .then(async connectedDevice => {
+            await setInitialValues(connectedDevice)
         })
         .catch(error => {
             console.log('Error: ', error);
@@ -92,6 +97,7 @@ async function addConnectedDevice(device) {
         heatingToggle: newItem.querySelector('#heatingToggle'),
     }
     addTemperatureTicks(result);
+    addHandleProcessing(result);
     devicesContainerElement.appendChild(newItem);
     connectedDevicesList.push(result);
     return result;
@@ -132,6 +138,43 @@ function addTemperatureTicks(device) {
         text.classList.add("gauge-tick-text");
         tickGroup.appendChild(text);
     }
+}
+
+function addHandleProcessing(device) {
+    const svg = device.temperatureHandle.closest('svg');
+    
+    device.temperatureHandle.addEventListener('pointerdown', e => {
+        e.preventDefault();
+        svg.setPointerCapture(e.pointerId); // moved to svg for broader capture
+
+        let pointerMoveHandler = e => {
+            const temp = readHandleRotationTemperature(svg, e.clientX, e.clientY);
+            updateTargetTemperatureSlider(device, temp);
+        };
+        svg.addEventListener('pointermove', pointerMoveHandler);
+
+        svg.addEventListener('pointerup', function pointerUpHandler(ev) {
+            svg.releasePointerCapture(ev.pointerId);
+            svg.removeEventListener('pointermove', pointerMoveHandler);
+            svg.removeEventListener('pointerup', pointerUpHandler);
+
+            const temp = readHandleRotationTemperature(svg, ev.clientX, ev.clientY);
+            setPowerDropTemperatures(device, temp);
+        });
+    });
+}
+
+function readHandleRotationTemperature(svgRect, x, y){
+    const rect = svgRect.getBoundingClientRect();
+    const cx = rect.left + 100;
+    const cy = rect.top + 100;
+    const dx = x - cx;
+    const dy = y - cy;
+    let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+    angle = angle + 180;
+    angle = Math.max(0, Math.min(180, angle));
+    const percent = angle / 180;
+    return  gaugeStartTemperature + (gaugeEndTemperature - gaugeStartTemperature) * percent;
 }
 
 function connectDeviceInfoPanel(connectedDevice) {
@@ -208,6 +251,7 @@ async function connectPowerDropCharacteristic(connectedDevice) {
 
     const currentValue = await characteristic.readValue();
     updatePowerDropTemperatures(connectedDevice, currentValue);
+    setPowerDropTemperatures(connectedDevice, initialTargetTemperature);
 }
 
 function updatePowerDropTemperatures(connectedDevice, value) {
@@ -228,7 +272,9 @@ function updateTargetTemperatureSlider(connectedDevice, value) {
     connectedDevice.temperatureSlider.style.strokeDashoffset = dashoffset.toString();
 }
 
-function setPowerDropTemperatures(connectedDevice, dropStart, dropEnd) {
+function setPowerDropTemperatures(connectedDevice, temp) {
+    const dropStart = temp - 0.5;
+    const dropEnd = temp + 0.5;
     const dataString = dropStart + ";" + dropEnd;
     const data = new TextEncoder().encode(dataString);
     return connectedDevice.powerDropCharacteristic.writeValue(data)

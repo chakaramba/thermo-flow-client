@@ -196,6 +196,7 @@ body {
     height: auto;
     display: block;
     overflow: visible;
+    touch-action: none;
 }
 
 .gauge-outline {
@@ -211,7 +212,7 @@ body {
 .gauge-fill {
     stroke: black;
     stroke-width: 10px;
-    transition: stroke-dashoffset 0.3s ease;
+    /*transition: stroke-dashoffset 0.3s ease;*/
     stroke-dasharray: 283; /* approximate arc length */
     stroke-dashoffset: 283;
 }
@@ -223,7 +224,7 @@ body {
 
 .gauge-handle {
     transform: rotate(-90deg);
-    transition: transform 0.3s ease;
+    /*transition: transform 0.3s ease;*/
     transform-origin: 100px 100px;
 }
 
