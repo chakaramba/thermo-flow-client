@@ -218,6 +218,8 @@ body {
 
 .card-container {
     display: flex;
+    align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 22px;
     padding: 22px;
@@ -391,7 +393,7 @@ body {
 }
 
 .gauge-label.power {
-    margin-left: -6px;
+    margin-left: -4px;
     padding-bottom: 6px;
 }
 
