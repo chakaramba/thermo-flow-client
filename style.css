@@ -22,6 +22,10 @@
     justify-content: center;
 }
 
+.add-btn:hover {
+    background-color: #eee;
+    color: #000;
+}
 
 body {
     margin: 0;
@@ -60,11 +64,6 @@ body {
     color: #222;
 }
 
-.add-btn:hover {
-    background-color: #eee;
-    color: #000;
-}
-
 .card-container {
     display: flex;
     align-items: center;
@@ -86,12 +85,35 @@ body {
     justify-content: center;
 }
 
+.device-card-header-row {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    padding: 2px 4px 0 0;
+    box-sizing: border-box;
+    margin-bottom: -10px;
+}
+
+.disconnect-btn {
+    font-size: 1.5rem;
+    font-weight: 300;
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+}
+
+.disconnect-btn:hover {
+    background-color: #eee;
+    color: #000;
+}
+
 .device-header {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding: 16px 18px 0 18px;
+    padding: 2px 18px 0 18px;
     box-sizing: border-box;
 }
 
@@ -193,7 +215,7 @@ body {
 }
 
 .device-temp-gauge {
-    margin: 50px 20px auto 20px;
+    margin: 30px 20px auto 20px;
     position: relative;
 }
 

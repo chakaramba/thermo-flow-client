@@ -83,7 +83,7 @@ async function addConnectedDevice(device) {
         temperatureTicksParent: newItem.querySelector('#temperatureTicksParent'),
         temperatureHandle: newItem.querySelector('#temperatureHandle'),
         temperatureSlider: newItem.querySelector('#temperatureSlider'),
-        // deviceRemoveButton: newItem.querySelector('#deviceRemoveButton'),
+        deviceRemoveButton: newItem.querySelector('#deviceRemoveButton'),
         currentTemperatureField: newItem.querySelector('#currentTemperatureField'),
         currentPowerOutputField: newItem.querySelector('#currentPowerOutputField'),
         heatingToggle: newItem.querySelector('#heatingToggle'),
@@ -136,7 +136,7 @@ function addTemperatureTicks(device) {
 
 function connectDeviceInfoPanel(connectedDevice) {
     connectedDevice.deviceNameField.innerHTML = connectedDevice.device.name;
-    // connectedDevice.deviceRemoveButton.addEventListener("click", () => disconnectDevice(connectedDevice));
+    connectedDevice.deviceRemoveButton.addEventListener("click", () => disconnectDevice(connectedDevice));
 }
 
 async function connectTemperatureSensorCharacteristic(connectedDevice) {
@@ -248,7 +248,7 @@ async function disconnectDevice(connectedDevice) {
     if (connectedDevice.gattServer && connectedDevice.gattServer.connected) {
         await connectedDevice.temperatureSensorCharacteristic.stopNotifications();
         await connectedDevice.heatingToggleCharacteristic.stopNotifications();
-        await connectedDevice.powerDropCharacteristic.stopNotifications();
+        // await connectedDevice.powerDropCharacteristic.stopNotifications();
         await connectedDevice.heatingPowerOutputCharacteristic.stopNotifications()
         console.log("Notifications from device stopped: ", connectedDevice.device.id)
     }
