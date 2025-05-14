@@ -343,7 +343,7 @@ body {
 }
 
 .gauge-handle {
-    transform: rotate(80deg);
+    transform: rotate(35deg);
     transition: transform 0.3s ease;
     transform-origin: 100px 100px;
 }
@@ -380,6 +380,8 @@ body {
     line-height: 1;
     display: flex;
     align-items: flex-end;
+    justify-content: center;
+    width: 2ch;
 }
 
 .gauge-label {
@@ -389,17 +391,26 @@ body {
 }
 
 .gauge-label.power {
-    margin-left: -9px;
+    margin-left: -6px;
     padding-bottom: 6px;
 }
 
 .gauge-label.current {
-    margin-right: -5px;
+    margin-right: -3px;
     padding-bottom: 6px;
 }
 
 .value-number {
     font-size: 50px;
+    display: inline-block;
+    width: 3ch;
+    text-align: right;
+}
+
+.power-value {
+    display: inline-block;
+    width: 3ch;
+    text-align: left;
 }
 
 .value-unit {
