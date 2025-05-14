@@ -332,18 +332,18 @@ body {
 }
 
 .gauge-outline {
-    stroke-width: 14px;
+    stroke-width: 11px;
     stroke: black;
 }
 
 .gauge-back {
-    stroke-width: 10px;
+    stroke-width: 9px;
     stroke:white;
 }
 
 .gauge-fill {
     stroke: black;
-    stroke-width: 12px;
+    stroke-width: 10px;
     transition: stroke-dashoffset 0.3s ease;
     stroke-dasharray: 283; /* approximate arc length */
     stroke-dashoffset: 90;
