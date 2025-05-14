@@ -59,10 +59,10 @@ async function connectToDevice() {
         .then(async connectedDevice => {
             return  Promise.all
             ([
-                // new Promise(() => connectDeviceInfoPanel(connectedDevice)),
-                // connectTemperatureSensorCharacteristic(connectedDevice),
-                // connectHeatingToggleCharacteristic(connectedDevice),
-                // connectHeatingPowerOutputCharacteristic(connectedDevice),
+                new Promise(() => connectDeviceInfoPanel(connectedDevice)),
+                connectTemperatureSensorCharacteristic(connectedDevice),
+                connectHeatingToggleCharacteristic(connectedDevice),
+                connectHeatingPowerOutputCharacteristic(connectedDevice),
                 // connectPowerDropCharacteristic(connectedDevice)
             ]);
         })
@@ -137,7 +137,6 @@ function addTemperatureTicks(device) {
 function connectDeviceInfoPanel(connectedDevice) {
     connectedDevice.deviceNameField.innerHTML = connectedDevice.device.name;
     // connectedDevice.deviceRemoveButton.addEventListener("click", () => disconnectDevice(connectedDevice));
-    connectedDevice.deviceConnectionStatusField.innerHTML = "Connected";
 }
 
 async function connectTemperatureSensorCharacteristic(connectedDevice) {
@@ -149,9 +148,9 @@ async function connectTemperatureSensorCharacteristic(connectedDevice) {
 }
 
 function updateTemperatureSensorValue(connectedDevice, value) {
-    const newValueReceived = new TextDecoder().decode(value);
-    connectedDevice.currentTemperatureField.innerHTML = newValueReceived + "°C";
-    connectedDevice.lastTemperatureUpdateTimeField.innerHTML = getCurrentDateTime();
+    const receivedValue = new TextDecoder().decode(value);
+    const roundedValue = Math.round(Number(receivedValue));
+    connectedDevice.currentTemperatureField.innerHTML = roundedValue.toString();
 }
 
 async function connectHeatingToggleCharacteristic(connectedDevice) {
@@ -159,8 +158,8 @@ async function connectHeatingToggleCharacteristic(connectedDevice) {
     console.log("Characteristic discovered:", characteristic.uuid);
 
     connectedDevice.heatingToggleCharacteristic = characteristic;
-    connectedDevice.heatingSwitchButtonOn.addEventListener("click", () => setHeatingToggleState(connectedDevice, true));
-    connectedDevice.heatingSwitchButtonOff.addEventListener("click", () => setHeatingToggleState(connectedDevice, false));
+    connectedDevice.heatingToggle.addEventListener("change", () => tryChangeHeatingToggleState(connectedDevice));
+    // connectedDevice.heatingSwitchButtonOff.addEventListener("click", () => setHeatingToggleState(connectedDevice, false));
 
     characteristic.addEventListener('characteristicvaluechanged', event => handleHeatingToggleStateUpdate(connectedDevice, event.target.value));
     await characteristic.startNotifications();
@@ -172,21 +171,11 @@ async function connectHeatingToggleCharacteristic(connectedDevice) {
 function handleHeatingToggleStateUpdate(connectedDevice, value) {
     const data = new TextDecoder().decode(value);
     const isOn = data === "on";
-    setButtonHidden(connectedDevice.heatingSwitchButtonOn, isOn);
-    setButtonHidden(connectedDevice.heatingSwitchButtonOff, !isOn);
-    connectedDevice.currentHeatingStateField.innerHTML = isOn ? "enabled" : "disabled";
+    connectedDevice.heatingToggle.checked = isOn;
 }
 
-function setButtonHidden(element, isHidden) {
-    const isCurrentlyHidden = element.classList.contains('hidden-button');
-    if (isHidden && isCurrentlyHidden) {
-        return;
-    }
-
-    element.classList.toggle('hidden-button');
-}
-
-function setHeatingToggleState(connectedDevice, isOn) {
+function tryChangeHeatingToggleState(connectedDevice) {
+    const isOn = connectedDevice.heatingToggle.checked;
     const data = new TextEncoder().encode(isOn ? "on" : "off");
     return connectedDevice.heatingToggleCharacteristic.writeValue(data);
 }

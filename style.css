@@ -109,6 +109,10 @@ body {
     fill: black;
 }
 
+.device-link-icon-lost {
+    fill: #f4c430;
+}
+
 .device-switch {
     margin-top: auto;
     margin-bottom: 18px;
@@ -242,12 +246,12 @@ body {
 }
 
 .gauge-label.power {
-    margin-left: -4px;
+    margin-left: -3px;
     padding-bottom: 6px;
 }
 
 .gauge-label.current {
-    margin-right: -3px;
+    margin-right: 3px;
     padding-bottom: 6px;
 }
 
@@ -266,7 +270,7 @@ body {
 
 .value-unit {
     font-size: 20px;
-    margin-left: -5px;
+    margin-left: -2px;
     padding-bottom: 25px;
 }
 
