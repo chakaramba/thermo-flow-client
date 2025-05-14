@@ -5,16 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Thermo Flow</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="thermo-flow-icon.png" />
+    <link rel="icon" type="image/png" href="thermo-flow-icon.png"/>
     <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 <header class="top-bar">
     <div class="top-bar-logo-container">
-        <img src="thermo-flow-icon.png" alt="Thermo Flow logo" class="logo-icon" />
-        <h1 class="title">Thermo Flow</h1>        
+        <img src="thermo-flow-icon.png" alt="Thermo Flow logo" class="logo-icon"/>
+        <h1 class="title">Thermo Flow</h1>
     </div>
     <button class="add-btn" aria-label="Add device">＋</button>
 </header>
+<main class="card-container">
+    <div class="device-card">
+        <div class="device-header">
+            <span class="device-name">ThermoFlow.1.01</span>
+            <svg class="device-link-icon" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.2423 22.6984C10.0332 21.4892 10.0332 19.5235 11.2423 18.3143L14.0707 15.4859L12.7272 14.1424L9.89882 16.9708C7.9472 18.9224 7.9472 22.0903 9.89882 24.0419C11.8504 25.9935 15.0183 25.9935 16.9699 24.0419L19.7983 21.2135L18.4548 19.87L15.6264 22.6984C14.4172 23.9075 12.4515 23.9075 11.2423 22.6984ZM14.8486 20.5063L20.5054 14.8495L19.0912 13.4353L13.4343 19.0921L14.8486 20.5063ZM16.9699 9.89974L14.1415 12.7282L15.485 14.0717L18.3134 11.2432C19.5225 10.0341 21.4883 10.0341 22.6974 11.2432C23.9066 12.4524 23.9066 14.4182 22.6974 15.6273L19.869 18.4557L21.2125 19.7992L24.041 16.9708C25.9926 15.0192 25.9926 11.8514 24.041 9.89974C22.0893 7.94813 18.9215 7.94813 16.9699 9.89974Z"/>
+            </svg>
+        </div>
+        <div class="device-temp-gauge"></div>
+        <div class="device-switch">
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+</main>
 </body>
 </html>
