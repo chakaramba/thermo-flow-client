@@ -18,94 +18,63 @@
         <button class="sync-btn" aria-label="Sync devices">
             <img src="sync-icon.png" alt="Sync" class="sync-icon"/>
         </button>
-        <button class="add-btn" aria-label="Add device">＋</button>
+        <button id="addNewDeviceButton" class="add-btn" aria-label="Add device">＋</button>
     </div>
 </header>
-<main class="card-container">
-    <div class="device-card">
-        <div class="device-header">
-            <span class="device-name">ThermoFlow.1.01</span>
-            <svg class="device-link-icon" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg">
-                <path d="M11.2423 22.6984C10.0332 21.4892 10.0332 19.5235 11.2423 18.3143L14.0707 15.4859L12.7272 14.1424L9.89882 16.9708C7.9472 18.9224 7.9472 22.0903 9.89882 24.0419C11.8504 25.9935 15.0183 25.9935 16.9699 24.0419L19.7983 21.2135L18.4548 19.87L15.6264 22.6984C14.4172 23.9075 12.4515 23.9075 11.2423 22.6984ZM14.8486 20.5063L20.5054 14.8495L19.0912 13.4353L13.4343 19.0921L14.8486 20.5063ZM16.9699 9.89974L14.1415 12.7282L15.485 14.0717L18.3134 11.2432C19.5225 10.0341 21.4883 10.0341 22.6974 11.2432C23.9066 12.4524 23.9066 14.4182 22.6974 15.6273L19.869 18.4557L21.2125 19.7992L24.041 16.9708C25.9926 15.0192 25.9926 11.8514 24.041 9.89974C22.0893 7.94813 18.9215 7.94813 16.9699 9.89974Z"/>
-            </svg>
-        </div>
-        <div class="device-temp-gauge">
-            <svg class="gauge-scale" viewBox="0 0 200 100">
-                <!-- Base arc -->
-                <path class="gauge-outline" d="M10,100 A90,90 0 0 1 190,100" stroke="#eee" fill="none"/>
-                <!-- Visible stroke (white, thinner) -->
-                <path class="gauge-back" d="M10,100 A90,90 0 0 1 190,100" stroke="white" stroke-width="10" fill="none"/>
+<main class="card-container" id="connectedDevicesContainer">
+    <template id="connectedDeviceTemplate">
+        <div class="device-card">
+            <div class="device-header">
+                <span class="device-name" id="deviceNameField">ThermoFlow.1.01</span>
+                <svg class="device-link-icon" id="deviceConnectionIcon" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.2423 22.6984C10.0332 21.4892 10.0332 19.5235 11.2423 18.3143L14.0707 15.4859L12.7272 14.1424L9.89882 16.9708C7.9472 18.9224 7.9472 22.0903 9.89882 24.0419C11.8504 25.9935 15.0183 25.9935 16.9699 24.0419L19.7983 21.2135L18.4548 19.87L15.6264 22.6984C14.4172 23.9075 12.4515 23.9075 11.2423 22.6984ZM14.8486 20.5063L20.5054 14.8495L19.0912 13.4353L13.4343 19.0921L14.8486 20.5063ZM16.9699 9.89974L14.1415 12.7282L15.485 14.0717L18.3134 11.2432C19.5225 10.0341 21.4883 10.0341 22.6974 11.2432C23.9066 12.4524 23.9066 14.4182 22.6974 15.6273L19.869 18.4557L21.2125 19.7992L24.041 16.9708C25.9926 15.0192 25.9926 11.8514 24.041 9.89974C22.0893 7.94813 18.9215 7.94813 16.9699 9.89974Z"/>
+                </svg>
+            </div>
+            <div class="device-temp-gauge">
+                <svg class="gauge-scale" viewBox="0 0 200 100">
+                    <!-- Base arc -->
+                    <path class="gauge-outline" d="M10,100 A90,90 0 0 1 190,100" stroke="#eee" fill="none"/>
+                    <!-- Visible stroke (white, thinner) -->
+                    <path class="gauge-back" d="M10,100 A90,90 0 0 1 190,100" stroke="white" stroke-width="10"
+                          fill="none"/>
 
-                <g class="gauge-ticks"></g>
+                    <g class="gauge-ticks" id="temperatureTicksParent"></g>
 
-                <!-- Fill arc -->
-                <path class="gauge-fill" d="M10,100 A90,90 0 0 1 190,100" stroke="#333" fill="none"/>
+                    <!-- Fill arc -->
+                    <path id="temperatureSlider" class="gauge-fill" d="M10,100 A90,90 0 0 1 190,100" stroke="#333" fill="none"/>
 
-                <!-- Rotatable handle group -->
-                <g class="gauge-handle" transform="rotate(0, 100, 100)">
-                    <circle cx="100" cy="10" r="12" fill="white" stroke="#ccc" stroke-width="1" filter="url(#shadow)"/>
-                </g>
-                <!-- Shadow filter definition -->
-                <defs>
-                    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.2"/>
-                    </filter>
-                </defs>
-            </svg>
-            <div class="gauge-readout">
-                <span class="gauge-label current">current</span>
-                <span class="gauge-value"><span class="value-number">78</span><span class="value-unit">°</span></span>
-                <span class="gauge-label power">pwr<span class="power-value">80%</span></span>
+                    <!-- Rotatable handle group -->
+                    <g class="gauge-handle" id="temperatureHandle" transform="rotate(0, 100, 100)">
+                        <circle cx="100" cy="10" r="12" fill="white" stroke="#ccc" stroke-width="1"
+                                filter="url(#shadow)"/>
+                    </g>
+                    <!-- Shadow filter definition -->
+                    <defs>
+                        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.2"/>
+                        </filter>
+                    </defs>
+                </svg>
+                <div class="gauge-readout">
+                    <span class="gauge-label current">current</span>
+                    <span class="gauge-value"><span class="value-number" id="currentTemperatureField">78</span><span
+                            class="value-unit">°</span></span>
+                    <span class="gauge-label power">pwr<span class="power-value" id="currentPowerOutputField">80%</span></span>
+                </div>
+            </div>
+            <div class="device-switch">
+                <label class="switch">
+                    <input type="checkbox" id="heatingToggle">
+                    <span class="slider"></span>
+                </label>
             </div>
         </div>
-        <div class="device-switch">
-            <label class="switch">
-                <input type="checkbox">
-                <span class="slider"></span>
-            </label>
-        </div>
-    </div>
-
+    </template>
 </main>
+<script src="main.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const tickGroup = document.querySelector('.gauge-ticks');
-        const centerX = 100;
-        const centerY = 100;
-        const outerRadius = 98;
-        const innerRadius = 82;
-        const labelRadius = 110;
-        const textOffsetX = 0;
-        const textOffsetY = 4;
-
-        const startTemperature = 30;
-        const endTemperature = 90;
-
-        for (let i = startTemperature; i <= endTemperature; i += 10) {
-            const angle = ((i - startTemperature) / (endTemperature - startTemperature)) * Math.PI;
-            const x1 = centerX + innerRadius * Math.cos(Math.PI - angle);
-            const y1 = centerY - innerRadius * Math.sin(Math.PI - angle);
-            const x2 = centerX + outerRadius * Math.cos(Math.PI - angle);
-            const y2 = centerY - outerRadius * Math.sin(Math.PI - angle);
-
-            const lx = centerX + labelRadius * Math.cos(Math.PI - angle);
-            const ly = centerY - labelRadius * Math.sin(Math.PI - angle);
-
-            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-            line.setAttribute("x1", x1.toString());
-            line.setAttribute("y1", y1.toString());
-            line.setAttribute("x2", x2.toString());
-            line.setAttribute("y2", y2.toString());
-            line.classList.add("gauge-tick");
-            tickGroup.appendChild(line);
-
-            const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            text.setAttribute("x", (lx + textOffsetX).toString());
-            text.setAttribute("y", (ly + textOffsetY).toString());
-            text.textContent = `${i}°`;
-            text.classList.add("gauge-tick-text");
-            tickGroup.appendChild(text);
-        }
+        
     });
 </script>
 </body>
