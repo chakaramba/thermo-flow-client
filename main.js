@@ -7,6 +7,9 @@ const powerDropCharacteristicGuid = '19b10003-e8f2-537e-4f6c-d104768a1214';
 const connectedDeviceTemplate = document.getElementById('connectedDeviceTemplate');
 const devicesContainerElement = document.getElementById("connectedDevicesContainer")
 
+const gaugeStartTemperature = 30;
+const gaugeEndTemperature = 90;
+
 const addNewDeviceButton = document.getElementById("addNewDeviceButton");
 addNewDeviceButton.addEventListener("click", tryAddNewDevice);
 
@@ -63,7 +66,7 @@ async function connectToDevice() {
                 connectTemperatureSensorCharacteristic(connectedDevice),
                 connectHeatingToggleCharacteristic(connectedDevice),
                 connectHeatingPowerOutputCharacteristic(connectedDevice),
-                // connectPowerDropCharacteristic(connectedDevice)
+                connectPowerDropCharacteristic(connectedDevice)
             ]);
         })
         .catch(error => {
@@ -104,11 +107,8 @@ function addTemperatureTicks(device) {
     const textOffsetX = 0;
     const textOffsetY = 4;
 
-    const startTemperature = 30;
-    const endTemperature = 90;
-
-    for (let i = startTemperature; i <= endTemperature; i += 10) {
-        const angle = ((i - startTemperature) / (endTemperature - startTemperature)) * Math.PI;
+    for (let i = gaugeStartTemperature; i <= gaugeEndTemperature; i += 10) {
+        const angle = ((i - gaugeStartTemperature) / (gaugeEndTemperature - gaugeStartTemperature)) * Math.PI;
         const x1 = centerX + innerRadius * Math.cos(Math.PI - angle);
         const y1 = centerY - innerRadius * Math.sin(Math.PI - angle);
         const x2 = centerX + outerRadius * Math.cos(Math.PI - angle);
@@ -203,12 +203,6 @@ async function connectPowerDropCharacteristic(connectedDevice) {
     console.log("Characteristic discovered:", characteristic.uuid);
     connectedDevice.powerDropCharacteristic = characteristic;
 
-    connectedDevice.setPowerDropTemperatureButton.addEventListener("click", () => setPowerDropTemperatures(
-        connectedDevice,
-        connectedDevice.setPowerDropStartTemperatureInputField.value,
-        connectedDevice.setPowerDropEndTemperatureInputField.value
-    ));
-
     characteristic.addEventListener('characteristicvaluechanged', event => updatePowerDropTemperatures(connectedDevice, event.target.value));
     await characteristic.startNotifications();
 
@@ -219,27 +213,25 @@ async function connectPowerDropCharacteristic(connectedDevice) {
 function updatePowerDropTemperatures(connectedDevice, value) {
     const decodedValue = new TextDecoder().decode(value);
     const values = decodedValue.split(";");
-    connectedDevice.currentPowerDropStartTemperatureField.innerHTML = Number(values[0]) + "°C";
-    connectedDevice.currentPowerDropEndTemperatureField.innerHTML = Number(values[1]) + "°C";
+    const targetTemperature = (Number(values[0]) + Number(values[1]))/2;
+    updateTargetTemperatureSlider(connectedDevice, targetTemperature)
+}
+
+function updateTargetTemperatureSlider(connectedDevice, value) {
+    const percent = ((value - gaugeStartTemperature) / (gaugeEndTemperature - gaugeStartTemperature));
+    const angle = percent * 180;
+    const handleAngleOffset = -90;
+    connectedDevice.temperatureHandle.style.transform = `rotate(${angle + handleAngleOffset}deg)`;
+    
+    const totalArcLength = 283; // This should match the stroke-dasharray
+    const dashoffset = totalArcLength * (1 - percent);
+    connectedDevice.temperatureSlider.style.strokeDashoffset = dashoffset.toString();
 }
 
 function setPowerDropTemperatures(connectedDevice, dropStart, dropEnd) {
     const dataString = dropStart + ";" + dropEnd;
     const data = new TextEncoder().encode(dataString);
     return connectedDevice.powerDropCharacteristic.writeValue(data)
-}
-
-function getCurrentDateTime() {
-    const currentDate = new Date();
-    const day = ("00" + currentDate.getDate()).slice(-2); // Convert day to string and slice
-    const month = ("00" + (currentDate.getMonth() + 1)).slice(-2);
-    const year = currentDate.getFullYear();
-    const hours = ("00" + currentDate.getHours()).slice(-2);
-    const minutes = ("00" + currentDate.getMinutes()).slice(-2);
-    const seconds = ("00" + currentDate.getSeconds()).slice(-2);
-
-    return hours + ":" + minutes + ":" + seconds;
-    // return day + "/" + month + "/" + year + " at " + hours + ":" + minutes + ":" + seconds;
 }
 
 async function disconnectDevice(connectedDevice) {

@@ -115,7 +115,7 @@ body {
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding: 2px 18px 0 18px;
+    padding: 2px 25px 0 10px;
     box-sizing: border-box;
 }
 
@@ -213,7 +213,7 @@ body {
     stroke-width: 10px;
     transition: stroke-dashoffset 0.3s ease;
     stroke-dasharray: 283; /* approximate arc length */
-    stroke-dashoffset: 90;
+    stroke-dashoffset: 283;
 }
 
 .device-temp-gauge {
@@ -222,7 +222,7 @@ body {
 }
 
 .gauge-handle {
-    transform: rotate(35deg);
+    transform: rotate(-90deg);
     transition: transform 0.3s ease;
     transform-origin: 100px 100px;
 }
