@@ -9,7 +9,7 @@ const devicesContainerElement = document.getElementById("connectedDevicesContain
 
 const gaugeStartTemperature = 30;
 const gaugeEndTemperature = 90;
-const initialTargetTemperature = 65; 
+const initialTargetTemperature = 61; 
 
 const addNewDeviceButton = document.getElementById("addNewDeviceButton");
 addNewDeviceButton.addEventListener("click", tryAddNewDevice);
