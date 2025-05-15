@@ -52,6 +52,10 @@ async function connectToDevice() {
             console.log('Device Selected:', device.name);
             return addConnectedDevice(device);
         })
+        .then(connectedDevice => {
+            connectedDevice.deviceConnectionIcon.classList.add('device-link-icon-connecting');
+            return connectedDevice;
+        })
         .then(async connectedDevice => {
             connectedDevice.gattServer = await connectedDevice.device.gatt.connect();
             console.log("Connected to GATT Server");
@@ -73,6 +77,10 @@ async function connectToDevice() {
                 connectHeatingPowerOutputCharacteristic(connectedDevice),
                 connectPowerDropCharacteristic(connectedDevice),
             ]);
+            return connectedDevice;
+        })
+        .then(connectedDevice => {
+            connectedDevice.deviceConnectionIcon.classList.remove('device-link-icon-connecting');
             return connectedDevice;
         })
         .catch(error => {
@@ -362,4 +370,3 @@ async function attemptReconnect(connectedDevice) {
         }
     }
 }
-

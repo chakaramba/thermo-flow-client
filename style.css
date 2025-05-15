@@ -137,6 +137,10 @@ body {
     fill: #f4c430;
 }
 
+.device-link-icon-connecting {
+    fill: #F9C1BD;
+}
+
 .device-switch {
     margin-top: auto;
     margin-bottom: 18px;
