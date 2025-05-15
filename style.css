@@ -67,10 +67,10 @@ body {
 .card-container {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     flex-wrap: wrap;
-    gap: 22px;
-    padding: 22px;
+    gap: 5px;
+    margin-top: 10px
 }
 
 .device-card {
