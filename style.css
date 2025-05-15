@@ -245,7 +245,7 @@ body {
 
 .gauge-readout {
     position: absolute;
-    top: 60px;
+    top: 70px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -271,17 +271,17 @@ body {
 }
 
 .gauge-label.power {
-    margin-left: -3px;
+    margin-left: -4px;
     padding-bottom: 6px;
 }
 
 .gauge-label.current {
-    margin-right: 3px;
+    margin-right: 6px;
     padding-bottom: 6px;
 }
 
 .value-number {
-    font-size: 50px;
+    font-size: 60px;
     display: inline-block;
     width: 3ch;
     text-align: right;
@@ -296,7 +296,7 @@ body {
 .value-unit {
     font-size: 20px;
     margin-left: -2px;
-    padding-bottom: 25px;
+    padding-bottom: 35px;
 }
 
 .sync-btn {
