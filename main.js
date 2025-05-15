@@ -317,7 +317,7 @@ function deleteConnectedDeviceView(connectedDevice) {
 }
 
 function onDisconnected(connectedDevice) {
-    connectedDevice.deviceConnectionStatusField.innerHTML = "Disconnected";
+    connectedDevice.deviceConnectionIcon.classList.add('device-link-icon-lost')
     if (connectedDevice.isDisconnectRequested){
         return;
     } 
@@ -331,7 +331,6 @@ async function attemptReconnect(connectedDevice) {
     
     while (!connectedDevice.isDisconnectRequested){
         try {
-            connectedDevice.deviceConnectionStatusField.innerHTML = `Reconnecting, attempt ${attempt + 1}`;
             console.log(`Reconnection attempt ${attempt + 1} for device: ${connectedDevice.device.name}`);
             connectedDevice.gattServer = await connectedDevice.device.gatt.connect();
             console.log(`Reconnected successfully to device's gatt: ${connectedDevice.device.name}`);
@@ -344,7 +343,7 @@ async function attemptReconnect(connectedDevice) {
                 connectPowerDropCharacteristic(connectedDevice)
             ]);
 
-            connectedDevice.deviceConnectionStatusField.innerHTML = "Connected";
+            connectedDevice.deviceConnectionIcon.classList.remove('device-link-icon-lost');
             connectedDevice.isDisconnectRequested = false;
             return;
         }
