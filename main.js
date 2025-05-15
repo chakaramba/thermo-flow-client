@@ -71,9 +71,6 @@ async function connectToDevice() {
             ]);
             return connectedDevice;
         })
-        .then(async connectedDevice => {
-            await setInitialValues(connectedDevice)
-        })
         .catch(error => {
             console.log('Error: ', error);
         });
@@ -85,6 +82,7 @@ async function addConnectedDevice(device) {
     let result = {
         device: device,
         isDisconnectRequested: false,
+        isSettingTemperature: false,
         domRoots: Array.from(newItem.childNodes),
         deviceNameField: newItem.querySelector('#deviceNameField'),
         deviceConnectionIcon: newItem.querySelector('#deviceConnectionIcon'),
@@ -140,16 +138,18 @@ function addTemperatureTicks(device) {
     }
 }
 
-function addHandleProcessing(device) {
-    const svg = device.temperatureHandle.closest('svg');
+function addHandleProcessing(connectedDevice) {
+    const svg = connectedDevice.temperatureHandle.closest('svg');
     
-    device.temperatureHandle.addEventListener('pointerdown', e => {
+    connectedDevice.temperatureHandle.addEventListener('pointerdown', e => {
         e.preventDefault();
         svg.setPointerCapture(e.pointerId); // moved to svg for broader capture
+        connectedDevice.isSettingTemperature = true;
 
         let pointerMoveHandler = e => {
             const temp = readHandleRotationTemperature(svg, e.clientX, e.clientY);
-            updateTargetTemperatureSlider(device, temp);
+            updateTargetTemperatureSlider(connectedDevice, temp);
+            setTemperatureView(connectedDevice, temp);
         };
         svg.addEventListener('pointermove', pointerMoveHandler);
 
@@ -159,7 +159,8 @@ function addHandleProcessing(device) {
             svg.removeEventListener('pointerup', pointerUpHandler);
 
             const temp = readHandleRotationTemperature(svg, ev.clientX, ev.clientY);
-            setPowerDropTemperatures(device, temp);
+            setPowerDropTemperatures(connectedDevice, temp);
+            connectedDevice.isSettingTemperature = false;
         });
     });
 }
@@ -174,7 +175,7 @@ function readHandleRotationTemperature(svgRect, x, y){
     angle = angle + 180;
     angle = Math.max(0, Math.min(180, angle));
     const percent = angle / 180;
-    return  gaugeStartTemperature + (gaugeEndTemperature - gaugeStartTemperature) * percent;
+    return  Math.round(gaugeStartTemperature + (gaugeEndTemperature - gaugeStartTemperature) * percent);
 }
 
 function connectDeviceInfoPanel(connectedDevice) {
@@ -193,7 +194,13 @@ async function connectTemperatureSensorCharacteristic(connectedDevice) {
 function updateTemperatureSensorValue(connectedDevice, value) {
     const receivedValue = new TextDecoder().decode(value);
     const roundedValue = Math.round(Number(receivedValue));
-    connectedDevice.currentTemperatureField.innerHTML = roundedValue.toString();
+    if (!connectedDevice.isSettingTemperature){
+        setTemperatureView(connectedDevice, roundedValue);  
+    }
+}
+
+function setTemperatureView(connectedDevice, value){
+    connectedDevice.currentTemperatureField.innerHTML = value.toString();
 }
 
 async function connectHeatingToggleCharacteristic(connectedDevice) {
