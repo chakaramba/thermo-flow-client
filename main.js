@@ -14,6 +14,10 @@ const initialTargetTemperature = 65;
 const addNewDeviceButton = document.getElementById("addNewDeviceButton");
 addNewDeviceButton.addEventListener("click", tryAddNewDevice);
 
+const syncSettingsButton = document.getElementById("syncDevicesSettingsButton");
+
+syncSettingsButton.addEventListener("click", trySyncDevicesSettings)
+
 let connectedDevicesList = [];
 
 function tryAddNewDevice() {
@@ -287,13 +291,17 @@ function setPowerDropTemperatures(connectedDevice, temp) {
     return connectedDevice.powerDropCharacteristic.writeValue(data)
 }
 
+function trySyncDevicesSettings() {
+    // todo
+}
+
 async function disconnectDevice(connectedDevice) {
     console.log("Disconnecting: ", connectedDevice.device.id);
     connectedDevice.isDisconnectRequested = true;
     if (connectedDevice.gattServer && connectedDevice.gattServer.connected) {
         await connectedDevice.temperatureSensorCharacteristic.stopNotifications();
         await connectedDevice.heatingToggleCharacteristic.stopNotifications();
-        // await connectedDevice.powerDropCharacteristic.stopNotifications();
+        await connectedDevice.powerDropCharacteristic.stopNotifications();
         await connectedDevice.heatingPowerOutputCharacteristic.stopNotifications()
         console.log("Notifications from device stopped: ", connectedDevice.device.id)
     }
